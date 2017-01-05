@@ -1,9 +1,9 @@
 /*
 [script info]
-version     = 1.5
+version     = 1.5.1
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
-source      = 
+source      = https://github.com/davebrny/in-line-calculator
 */
 
     ;# script settings
@@ -170,14 +170,14 @@ convert_letters(equation) {
 
 #ifWinActive, ahk_group calculator_apps
 
-p::+    ; plus
-a::+    ; and OR add
-m::-    ; minus
-s::-    ; subtract
-x::*    ; multiply
-t::*    ; times
-b::*    ; by
-d::/    ; divide
+p::send, {+}    ; plus
+a::send, {+}    ; and OR add
+m::send, {-}    ; minus
+s::send, {-}    ; subtract
+x::send, {*}    ; multiply
+t::send, {*}    ; times
+b::send, {*}    ; by
+d::send, {/}    ; divide
 
 =::send {enter}
 
