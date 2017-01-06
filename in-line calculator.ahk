@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.5.1
+version     = 1.5.2
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -15,6 +15,7 @@ sendMode input
 iniRead, use_number_row,   % a_scriptDir "\settings.ini", settings, use_number_row
 iniRead, use_number_pad,   % a_scriptDir "\settings.ini", settings, use_number_pad
 iniRead, enable_backspace, % a_scriptDir "\settings.ini", settings, enable_backspace
+iniRead, timeout, % a_scriptDir "\settings.ini", settings, timeout
 
     ;# tray menu stuff
 script_icon := a_scriptDir "\in-line calculator.ico"
@@ -74,7 +75,7 @@ if (calculator_state != "active")
     first_input   := regExReplace(a_thisHotkey, "[^0-9.(-]")
     active_window := winExist("a")
 
-    input, equation, V T60, %end_keys%
+    input, equation, V %timeout%, %end_keys%
     this_hotstring := strReplace(errorLevel, "EndKey:", "")
 
     if (winExist("a") != active_window)
