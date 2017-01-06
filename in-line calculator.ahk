@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.5.2
+version     = 1.5.3
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -27,7 +27,7 @@ groupAdd, calculator_apps, Calculator ahk_exe ApplicationFrameHost.exe  ; window
 groupAdd, calculator_apps, ahk_class CalcFrame                     ; windows classic
 groupAdd, calculator_apps, ahk_exe numbers.exe                     ; windows 8 Metro
 
-    ;# set calculator number keys
+    ;# calculator hotstring keys
 hotkey, ifWinNotActive, ahk_group calculator_apps
 loop, 10
     {
@@ -41,24 +41,26 @@ hotkey, ~. , inline_hotstring, on
 hotkey, ~( , inline_hotstring, on
 hotkey, ifWinNotActive
 
-    ;# keys that will deactivate the calculator
+    ;# keys that will end the calculator
 end_keys =
 (join
-{=}{#}{esc}{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{``}{!}{"}{$}
-{`%}{^}{&}{*}{_}{[}{]}{{}{}}{;}{:}{'}{@}{~}{<}{>}{?}{F1}{F2}{F3}{F4}{F5}{F6}
-{F7}{F8}{F9}{F10}{F11}{F12}{capslock}{tab}{enter}{scrollLock}{del}{insert}
-{home}{end}{pgUp}{pgDn}{up}{down}{left}{right}{LWin}{rWin}{control}{LControl}
-{rControl}{alt}{lAlt}{rAlt}{numlock}{appsKey}{printScreen}{ctrlBreak}{pause}
-{help}{sleep}{numpadIns}{numpadEnd}{numpadDown}{numpadPgDn}{numpadLeft}
-{numpadClear}{numpadRight}{numpadHome}{numpadUp}{numbpadPgUp}{numpadDel}
-{numpadEnter}{browser_back}{browser_forward}{browser_refresh}{browser_stop}
+{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{[}{]}{;}{'}{`}{#}{=}{!}{"}
+{$}{`%}{^}{&}{_}{{}{}}{:}{@}{~}{<}{>}{?}{\}{|}{up}{down}{left}{right}{esc}{enter}
+{delete}{tab}{LWin}{rWin}{LControl}{rControl}{LAlt}{rAlt}{printScreen}{home}{end}
+{insert}{pgUp}{pgDn}{numlock}{scrollLock}{help}{appsKey}{ctrlBreak}{pause}{sleep}
+{capsLock}{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{F13}{F14}{F15}{F16}
+{F17}{F18}{F19}{F20}{F21}{F22}{F23}{F24}{numpadEnter}{numpadUp}{numpadDown}
+{numpadLeft}{numpadRight}{numpadAdd}{numpadSub}{numpadMult}{numpadDiv}
+{numpadClear}{numpadHome}{numpadEnd}{numpadPgUp}{numpadPgDn}{numpadIns}
+{numpadDel}{browser_back}{browser_forward}{browser_refresh}{browser_stop}
 {browser_search}{browser_favorites}{browser_home}{launch_mail}{launch_media}
 {launch_app1}{launch_app2}
 )
 if (enable_backspace = "no")
-    end_keys .= "{backspace}"    ; have backspace deactivate the calculator 
+    end_keys .= "{backspace}"    ; add backspace to the list of end keys
 
 return  ; end of auto-execute --------------------------------------------------
+
 
 
 
@@ -83,7 +85,7 @@ if (calculator_state != "active")
     if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
         goTo, turn_calculator_off
     if (this_hotstring != "=") and (this_hotstring != "#")
-        goTo, turn_calculator_off 
+        goTo, turn_calculator_off
 
     equation := convert_letters(first_input . equation)
     if equation contains +,-,*,/
@@ -105,7 +107,7 @@ equation := convert_letters( trim(clipboard) )
 clipboard := revert_clipboard
 
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(). \E]")
-    return    ; only continue if numbers, spaces or +/-*.()
+    return    ; only continue if numbers, +/-*.() or spaces
 
 if equation not contains +,-,*,/         ; convert spaces to pluses
     stringReplace, equation, equation, % a_space, +, all
