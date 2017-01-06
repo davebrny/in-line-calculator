@@ -23,27 +23,27 @@ start_with_windows(1)    ; add the option to start the script when windows boots
 
     ;# group calculator apps
 groupAdd, calculator_apps, Calculator ahk_exe ApplicationFrameHost.exe  ; windows 10
-groupAdd, calculator_apps, ahk_class CalcFrame          ; windows classic calculator
-groupAdd, calculator_apps, ahk_exe numbers.exe          ; windows 8 Metro calculator
+groupAdd, calculator_apps, ahk_class CalcFrame                     ; windows classic
+groupAdd, calculator_apps, ahk_exe numbers.exe                     ; windows 8 Metro
 
-    ;# set hotkeys
+    ;# set calculator number keys
 hotkey, ifWinNotActive, ahk_group calculator_apps
 loop, 10
     {
     if (use_number_row = "yes")    ; set 0 to 9
-        hotkey, % "~" a_index - 1, inline_hotstring, on
-    if (use_number_pad = "yes")    ; set 0 to 9 on numberpad 
-        hotkey, % "~numpad" a_index - 1, inline_hotstring, on
+        hotkey, % "~" . a_index - 1, inline_hotstring, on
+    if (use_number_pad = "yes")    ; set 0 to 9 on numberpad
+        hotkey, % "~numpad" . a_index - 1, inline_hotstring, on
     }
-hotkey, ~- , inline_hotstring, on   ; other keys that can activate the calulator
+hotkey, ~- , inline_hotstring, on   ; other keys that can activate the calculator
 hotkey, ~. , inline_hotstring, on
 hotkey, ~( , inline_hotstring, on
 hotkey, ifWinNotActive
 
     ;# keys that will deactivate the calculator
-endkeys =
+end_keys =
 (join
-{=}{#}{Esc}{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{``}{!}{"}{$}
+{=}{#}{esc}{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{``}{!}{"}{$}
 {`%}{^}{&}{*}{_}{[}{]}{{}{}}{;}{:}{'}{@}{~}{<}{>}{?}{F1}{F2}{F3}{F4}{F5}{F6}
 {F7}{F8}{F9}{F10}{F11}{F12}{capslock}{tab}{enter}{scrollLock}{del}{insert}
 {home}{end}{pgUp}{pgDn}{up}{down}{left}{right}{LWin}{rWin}{control}{LControl}
@@ -55,10 +55,9 @@ endkeys =
 {launch_app1}{launch_app2}
 )
 if (enable_backspace = "no")
-    endkeys .= "{backspace}"    ; have backspace deactivate the calculator 
+    end_keys .= "{backspace}"    ; have backspace deactivate the calculator 
 
-return  ; end of auto-execute
-; ------------------------------------------------------------------------------
+return  ; end of auto-execute --------------------------------------------------
 
 
 
@@ -75,7 +74,7 @@ if (calculator_state != "active")
     first_input   := regExReplace(a_thisHotkey, "[^0-9.(-]")
     active_window := winExist("a")
 
-    input, equation, V T60, %endkeys%
+    input, equation, V T60, %end_keys%
     this_hotstring := strReplace(errorLevel, "EndKey:", "")
 
     if (winExist("a") != active_window)
@@ -107,7 +106,7 @@ clipboard := revert_clipboard
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(). \E]")
     return    ; only continue if numbers, spaces or +/-*.()
 
-if equation not contains +,-,*,/        ; convert spaces to pluses
+if equation not contains +,-,*,/         ; convert spaces to pluses
     stringReplace, equation, equation, % a_space, +, all
 
 goSub, calculate_equation
@@ -179,6 +178,6 @@ t::send, {*}    ; times
 b::send, {*}    ; by
 d::send, {/}    ; divide
 
-=::send {enter}
+=::send, {enter}
 
 #ifWinActive
