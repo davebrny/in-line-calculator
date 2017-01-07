@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.6.1
+version     = 1.6.3
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -102,12 +102,12 @@ return
 
 !=::    ; in-line hotkeys
 !#::
-revert_clipboard := clipboardAll
-clipboard =
+clipboard("save")
+clipboard("clear")
 send ^{c}
 clipWait, 0.3
 equation := convert_letters( trim(clipboard) )
-clipboard := revert_clipboard
+clipboard("restore")
 
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(). \E]")
     return    ; only continue if numbers, +/-*.() or spaces
@@ -130,9 +130,16 @@ if (result != "")
     if (this_endkey = "=") or (this_endkey = "#")
         send % "{backspace " strLen(equation) + 1 "}"  ; delete input
 
-    if (this_endkey = "#") or (a_thisHotkey = "!#")
-         sendRaw % equation " = " result
-    else sendRaw % result
+    if (this_endkey = "=") or (a_thisHotkey = "!=")
+        sendRaw % result
+    else
+        {
+        clipboard("save")
+        clipboard := equation " = " result
+        send, ^{v}
+        sleep 50
+        clipboard("restore")
+        }
     }
 return
 
@@ -169,6 +176,18 @@ convert_letters(string) {
                            , "x":"*", "t":"*", "b":"*", "d":"/"}
         stringReplace, string, string, % letters, % symbols, all
     return string
+}
+
+
+
+clipboard(action="") {
+    global
+    if (action = "save")
+        clipboard_r := clipboardAll
+    else if (action = "restore")
+        clipboard := clipboard_r
+    else if (action = "clear")
+        clipboard := ""
 }
 
 
