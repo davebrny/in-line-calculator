@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.5.3
+version     = 1.6
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -14,7 +14,6 @@ sendMode input
     ;# read ini settings
 iniRead, use_number_row,   % a_scriptDir "\settings.ini", settings, use_number_row
 iniRead, use_number_pad,   % a_scriptDir "\settings.ini", settings, use_number_pad
-iniRead, enable_backspace, % a_scriptDir "\settings.ini", settings, enable_backspace
 iniRead, timeout, % a_scriptDir "\settings.ini", settings, timeout
 
     ;# tray menu stuff
@@ -46,18 +45,15 @@ end_keys =
 (join
 {c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{[}{]}{;}{'}{`}{#}{=}{!}{"}
 {$}{`%}{^}{&}{_}{{}{}}{:}{@}{~}{<}{>}{?}{\}{|}{up}{down}{left}{right}{esc}{enter}
-{delete}{tab}{LWin}{rWin}{LControl}{rControl}{LAlt}{rAlt}{printScreen}{home}{end}
-{insert}{pgUp}{pgDn}{numlock}{scrollLock}{help}{appsKey}{ctrlBreak}{pause}{sleep}
-{capsLock}{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{F13}{F14}{F15}{F16}
-{F17}{F18}{F19}{F20}{F21}{F22}{F23}{F24}{numpadEnter}{numpadUp}{numpadDown}
-{numpadLeft}{numpadRight}{numpadAdd}{numpadSub}{numpadMult}{numpadDiv}
-{numpadClear}{numpadHome}{numpadEnd}{numpadPgUp}{numpadPgDn}{numpadIns}
-{numpadDel}{browser_back}{browser_forward}{browser_refresh}{browser_stop}
-{browser_search}{browser_favorites}{browser_home}{launch_mail}{launch_media}
-{launch_app1}{launch_app2}
+{delete}{backspace}{tab}{LWin}{rWin}{LControl}{rControl}{LAlt}{rAlt}{printScreen}
+{home}{end}{insert}{pgUp}{pgDn}{numlock}{scrollLock}{help}{appsKey}{pause}{sleep}
+{ctrlBreak}{capsLock}{numpadEnter}{numpadUp}{numpadDown}{numpadLeft}{numpadRight}
+{numpadAdd}{numpadSub}{numpadMult}{numpadDiv}{numpadClear}{numpadHome}{numpadEnd}
+{numpadPgUp}{numpadPgDn}{numpadIns}{numpadDel}{browser_back}{browser_forward}
+{browser_refresh}{browser_stop}{browser_search}{browser_favorites}{browser_home}
+{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{F13}{F14}{F15}{F16}{F17}{F18}
+{F19}{F20}{F21}{F22}{F23}{F24}
 )
-if (enable_backspace = "no")
-    end_keys .= "{backspace}"    ; add backspace to the list of end keys
 
 return  ; end of auto-execute --------------------------------------------------
 
@@ -74,11 +70,18 @@ if (calculator_state != "active")
     {
     calculator("on")
 
-    first_input   := regExReplace(a_thisHotkey, "[^0-9.(-]")
+    this_input := regExReplace(a_thisHotkey, "[^0-9.(-]")
     active_window := winExist("a")
 
-    input, equation, V %timeout%, %end_keys%
-    this_hotstring := strReplace(errorLevel, "EndKey:", "")
+    loop,
+        {
+        input, new_input, V %timeout%, %end_keys%
+        this_input .= new_input  ; append
+        this_hotstring := strReplace(errorLevel, "EndKey:", "")
+        if (this_hotstring = "backspace")  ; trim 1 and continue with loop/input
+            stringTrimRight, this_input, this_input, 1
+        else break
+        }
 
     if (winExist("a") != active_window)
         goTo, turn_calculator_off
@@ -87,7 +90,7 @@ if (calculator_state != "active")
     if (this_hotstring != "=") and (this_hotstring != "#")
         goTo, turn_calculator_off
 
-    equation := convert_letters(first_input . equation)
+    equation := convert_letters(this_input)
     if equation contains +,-,*,/
         goSub, calculate_equation
 
