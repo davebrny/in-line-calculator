@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.6
+version     = 1.6.1
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -35,7 +35,7 @@ loop, 10
     if (use_number_pad = "yes")    ; set 0 to 9 on numberpad
         hotkey, % "~numpad" . a_index - 1, inline_hotstring, on
     }
-hotkey, ~- , inline_hotstring, on   ; other keys that can activate the calculator
+hotkey, ~- , inline_hotstring, on  ; other keys that can activate the calculator
 hotkey, ~. , inline_hotstring, on
 hotkey, ~( , inline_hotstring, on
 hotkey, ifWinNotActive
@@ -43,7 +43,7 @@ hotkey, ifWinNotActive
     ;# keys that will end the calculator
 end_keys =
 (join
-{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{[}{]}{;}{'}{`}{#}{=}{!}{"}
+{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{[}{]}{;}{'}{``}{#}{=}{!}{"}
 {$}{`%}{^}{&}{_}{{}{}}{:}{@}{~}{<}{>}{?}{\}{|}{up}{down}{left}{right}{esc}{enter}
 {delete}{backspace}{tab}{LWin}{rWin}{LControl}{rControl}{LAlt}{rAlt}{printScreen}
 {home}{end}{insert}{pgUp}{pgDn}{numlock}{scrollLock}{help}{appsKey}{pause}{sleep}
@@ -77,8 +77,8 @@ if (calculator_state != "active")
         {
         input, new_input, V %timeout%, %end_keys%
         this_input .= new_input  ; append
-        this_hotstring := strReplace(errorLevel, "EndKey:", "")
-        if (this_hotstring = "backspace")  ; trim 1 and continue with loop/input
+        this_endkey := strReplace(errorLevel, "EndKey:", "")
+        if (this_endkey = "backspace")  ; trim 1 and continue with loop/input
             stringTrimRight, this_input, this_input, 1
         else break
         }
@@ -87,7 +87,7 @@ if (calculator_state != "active")
         goTo, turn_calculator_off
     if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
         goTo, turn_calculator_off
-    if (this_hotstring != "=") and (this_hotstring != "#")
+    if (this_endkey != "=") and (this_endkey != "#")
         goTo, turn_calculator_off
 
     equation := convert_letters(this_input)
@@ -100,7 +100,7 @@ return
 
 
 
-!=::
+!=::    ; in-line hotkeys
 !#::
 revert_clipboard := clipboardAll
 clipboard =
@@ -121,16 +121,16 @@ return
 
 
 calculate_equation:
-result := eval(equation)     ; convert string to expression
+result := eval(equation)    ; convert string to expression
 if (result != "")
     {
-    if inStr(result, ".")    ; trim 0's if decimal
+    if inStr(result, ".")   ; trim 0's if decimal
         result := rTrim( rTrim(result, "0"), ".")
 
-    if (this_hotstring = "=") or (this_hotstring = "#")
+    if (this_endkey = "=") or (this_endkey = "#")
         send % "{backspace " strLen(equation) + 1 "}"  ; delete input
 
-    if (this_hotstring = "#") or (a_thisHotkey = "!#")
+    if (this_endkey = "#") or (a_thisHotkey = "!#")
          sendRaw % equation " = " result
     else sendRaw % result
     }
@@ -156,19 +156,19 @@ calculator(mode) {
         }
     else
         {
+        this_endkey =
         calculator_state := "idle"
         menu, tray, icon, % script_icon, 1  ; default icon
         }
-    this_hotstring =  ; reset
 }
 
 
 
-convert_letters(equation) {
+convert_letters(string) {
     for letters, symbols in {"p":"+", "a":"+", "m":"-", "s":"-"
                            , "x":"*", "t":"*", "b":"*", "d":"/"}
-        stringReplace, equation, equation, % letters, % symbols, all
-    return equation
+        stringReplace, string, string, % letters, % symbols, all
+    return string
 }
 
 
