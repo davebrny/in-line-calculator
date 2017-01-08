@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.6.3
+version     = 1.6.4
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -12,8 +12,8 @@ source      = https://github.com/davebrny/in-line-calculator
 sendMode input
 
     ;# read ini settings
-iniRead, use_number_row,   % a_scriptDir "\settings.ini", settings, use_number_row
-iniRead, use_number_pad,   % a_scriptDir "\settings.ini", settings, use_number_pad
+iniRead, use_number_row, % a_scriptDir "\settings.ini", settings, use_number_row
+iniRead, use_number_pad, % a_scriptDir "\settings.ini", settings, use_number_pad
 iniRead, timeout, % a_scriptDir "\settings.ini", settings, timeout
 
     ;# tray menu stuff
@@ -22,12 +22,12 @@ menu, tray, icon, % script_icon
 start_with_windows(1)    ; add the option to start the script when windows boots
 
     ;# group calculator apps
-groupAdd, calculator_apps, Calculator ahk_exe ApplicationFrameHost.exe  ; windows 10
-groupAdd, calculator_apps, ahk_class CalcFrame                     ; windows classic
-groupAdd, calculator_apps, ahk_exe numbers.exe                     ; windows 8 Metro
+groupAdd, calculators, Calculator ahk_exe ApplicationFrameHost.exe  ; windows 10
+groupAdd, calculators, ahk_class CalcFrame                     ; windows classic
+groupAdd, calculators, ahk_exe numbers.exe                     ; windows 8 Metro
 
     ;# calculator hotstring keys
-hotkey, ifWinNotActive, ahk_group calculator_apps
+hotkey, ifWinNotActive, ahk_group calculators
 loop, 10
     {
     if (use_number_row = "yes")    ; set 0 to 9
@@ -55,7 +55,7 @@ end_keys =
 {F19}{F20}{F21}{F22}{F23}{F24}
 )
 
-return  ; end of auto-execute --------------------------------------------------
+return  ; end of auto-execute ---------------------------------------------------
 
 
 
@@ -70,7 +70,7 @@ if (calculator_state != "active")
     {
     calculator("on")
 
-    this_input := regExReplace(a_thisHotkey, "[^0-9.(-]")
+    this_input := LTrim(a_thisHotkey, "~")
     active_window := winExist("a")
 
     loop,
@@ -78,19 +78,17 @@ if (calculator_state != "active")
         input, new_input, V %timeout%, %end_keys%
         this_input .= new_input  ; append
         this_endkey := strReplace(errorLevel, "EndKey:", "")
-        if (this_endkey = "backspace")  ; trim 1 and continue with loop/input
+        if (this_endkey = "backspace")    ; trim and continue with loop/input
             stringTrimRight, this_input, this_input, 1
         else break
         }
 
-    if (winExist("a") != active_window)
-        goTo, turn_calculator_off
-    if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
-        goTo, turn_calculator_off
     if (this_endkey != "=") and (this_endkey != "#")
         goTo, turn_calculator_off
+    if (winExist("a") != active_window)
+        goTo, turn_calculator_off
 
-    equation := convert_letters(this_input)
+    equation := convert_letters(this_input)    ; convert letters to math symbols
     if equation contains +,-,*,/
         goSub, calculate_equation
 
@@ -124,7 +122,7 @@ calculate_equation:
 result := eval(equation)    ; convert string to expression
 if (result != "")
     {
-    if inStr(result, ".")   ; trim 0's if decimal
+    if inStr(result, ".")    ; trim trailing .000
         result := rTrim( rTrim(result, "0"), ".")
 
     if (this_endkey = "=") or (this_endkey = "#")
@@ -192,7 +190,7 @@ clipboard(action="") {
 
 
 
-#ifWinActive, ahk_group calculator_apps
+#ifWinActive, ahk_group calculators
 
 p::send, {+}    ; plus
 a::send, {+}    ; and OR add
