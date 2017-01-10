@@ -135,8 +135,9 @@ if (result != "")
     if inStr(result, ".")    ; trim trailing .000
         result := rTrim( rTrim(result, "0"), ".")
 
-    if (this_endkey = "=") or (this_endkey = "#")
-        send % "{backspace " strLen(equation) + 1 "}"  ; delete input
+    if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
+         send % "{right}{backspace " strLen(equation) "}"  ; delete selected text
+    else send % "{backspace " strLen(equation) + 1 "}"     ; delete hotstring input
 
     if (this_endkey = "=") or (a_thisHotkey = "!=")
         sendRaw % result
