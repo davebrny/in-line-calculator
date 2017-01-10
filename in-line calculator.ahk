@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.6.5
+version     = 1.6.6
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -20,6 +20,8 @@ iniRead, enable_hotkeys,    % ini, settings, enable_hotkeys
 iniRead, timeout,           % ini, settings, timeout
 
     ;# tray menu stuff
+if (a_isCompiled = 1)
+    menu, tray, add, Reload This Script, reload
 script_icon := a_scriptDir "\in-line calculator.ico"
 menu, tray, icon, % script_icon
 start_with_windows(1)    ; add the option to start the script when windows boots
@@ -91,7 +93,7 @@ if (calculator_state != "active")
         this_endkey := strReplace(errorLevel, "EndKey:", "")
         if (this_endkey = "backspace")    ; trim and continue with loop/input
             stringTrimRight, this_input, this_input, 1
-        else break
+        else break  ; if any other end key
         }
 
     if (this_endkey != "=") and (this_endkey != "#")
@@ -172,7 +174,7 @@ calculator(mode) {
         }
     else
         {
-        this_endkey =
+        this_endkey =  ; clear
         calculator_state := "idle"
         menu, tray, icon, % script_icon, 1  ; default icon
         }
@@ -198,6 +200,15 @@ clipboard(action="") {
     else if (action = "clear")
         clipboard := ""
 }
+
+
+
+reload:
+reload
+sleep 1000
+msgBox, 4, , The script could not be reloaded and will need to be manually restarted. Would you like Exit?
+ifMsgBox, yes, exitApp
+return
 
 
 
