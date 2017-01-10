@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.6.4
+version     = 1.6.5
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -11,10 +11,13 @@ source      = https://github.com/davebrny/in-line-calculator
 #singleInstance, force
 sendMode input
 
-    ;# read ini settings
-iniRead, use_number_row, % a_scriptDir "\settings.ini", settings, use_number_row
-iniRead, use_number_pad, % a_scriptDir "\settings.ini", settings, use_number_pad
-iniRead, timeout, % a_scriptDir "\settings.ini", settings, timeout
+    ;# ini settings
+ini := a_scriptDir "\settings.ini"
+iniRead, enable_hotstrings, % ini, settings, enable_hotstrings
+iniRead, enable_number_row, % ini, settings, enable_number_row
+iniRead, enable_number_pad, % ini, settings, enable_number_pad
+iniRead, enable_hotkeys,    % ini, settings, enable_hotkeys
+iniRead, timeout,           % ini, settings, timeout
 
     ;# tray menu stuff
 script_icon := a_scriptDir "\in-line calculator.ico"
@@ -26,18 +29,26 @@ groupAdd, calculators, Calculator ahk_exe ApplicationFrameHost.exe  ; windows 10
 groupAdd, calculators, ahk_class CalcFrame                     ; windows classic
 groupAdd, calculators, ahk_exe numbers.exe                     ; windows 8 Metro
 
-    ;# calculator hotstring keys
+    ;# set hotstrings & hotkeys
 hotkey, ifWinNotActive, ahk_group calculators
-loop, 10
+if (enable_hotstrings = "yes")
     {
-    if (use_number_row = "yes")    ; set 0 to 9
-        hotkey, % "~" . a_index - 1, inline_hotstring, on
-    if (use_number_pad = "yes")    ; set 0 to 9 on numberpad
-        hotkey, % "~numpad" . a_index - 1, inline_hotstring, on
+    loop, 10
+        {
+        if (enable_number_row = "yes")    ; set 0 to 9
+            hotkey, % "~" . a_index - 1, inline_hotstring, on
+        if (enable_number_pad = "yes")    ; set 0 to 9 on numberpad
+            hotkey, % "~numpad" . a_index - 1, inline_hotstring, on
+        }
+    hotkey, ~- , inline_hotstring, on  ; other keys that can activate the calculator
+    hotkey, ~. , inline_hotstring, on
+    hotkey, ~( , inline_hotstring, on
     }
-hotkey, ~- , inline_hotstring, on  ; other keys that can activate the calculator
-hotkey, ~. , inline_hotstring, on
-hotkey, ~( , inline_hotstring, on
+if (enable_hotkeys = "yes")
+    {
+    hotkey, !=, inline_hotkey, on
+    hotkey, !#, inline_hotkey, on
+    }
 hotkey, ifWinNotActive
 
     ;# keys that will end the calculator
@@ -98,8 +109,7 @@ return
 
 
 
-!=::    ; in-line hotkeys
-!#::
+inline_hotkey:
 clipboard("save")
 clipboard("clear")
 send ^{c}
@@ -130,7 +140,7 @@ if (result != "")
 
     if (this_endkey = "=") or (a_thisHotkey = "!=")
         sendRaw % result
-    else
+    else ; # or !#
         {
         clipboard("save")
         clipboard := equation " = " result
