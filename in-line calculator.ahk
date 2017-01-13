@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.6.6
+version     = 1.6.7
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -138,8 +138,8 @@ if (result != "")
         result := rTrim( rTrim(result, "0"), ".")
 
     if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
-         send % "{right}{backspace " strLen(equation) "}"  ; delete selected text
-    else send % "{backspace " strLen(equation) + 1 "}"     ; delete hotstring input
+         send % "{backspace}"                           ; delete selected text
+    else send % "{backspace " strLen(equation) + 1 "}"  ; delete hotstring input
 
     if (this_endkey = "=") or (a_thisHotkey = "!=")
         sendRaw % result
@@ -148,7 +148,7 @@ if (result != "")
         clipboard("save")
         clipboard := equation " = " result
         send, ^{v}
-        sleep 50
+        sleep 100
         clipboard("restore")
         }
     }
