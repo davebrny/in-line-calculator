@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.6.7
+version     = 1.6.8
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -113,10 +113,9 @@ return
 
 inline_hotkey:
 clipboard("save")
-clipboard("clear")
-send ^{c}
-clipWait, 0.3
-equation := convert_letters( trim(clipboard) )
+clipboard("get")
+selected := clipboard
+equation := convert_letters( trim(selected) )
 clipboard("restore")
 
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(). \E]")
@@ -141,16 +140,22 @@ if (result != "")
          send % "{backspace}"                           ; delete selected text
     else send % "{backspace " strLen(equation) + 1 "}"  ; delete hotstring input
 
+    clipboard("save")
     if (this_endkey = "=") or (a_thisHotkey = "!=")
-        sendRaw % result
-    else ; # or !#
+         clipboard := result
+    else clipboard := equation " = " result
+    clipboard("paste")
+
+    if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
         {
-        clipboard("save")
-        clipboard := equation " = " result
-        send, ^{v}
-        sleep 100
-        clipboard("restore")
+        clipboard("get")
+        if (clipboard = selected)  ; if clipboard wasnt pasted
+            {
+            toolTip, % result
+            setTimer, msg_timer, 2500
+            }
         }
+    clipboard("restore")
     }
 return
 
@@ -195,10 +200,31 @@ clipboard(action="") {
     global
     if (action = "save")
         clipboard_r := clipboardAll
+    else if (action = "get")
+        {
+        clipboard := ""
+        send ^{c}
+        clipWait, 0.3
+        }
+    else if (action = "paste")
+        {
+        send, ^{v}
+        sleep 100
+        }
     else if (action = "restore")
         clipboard := clipboard_r
-    else if (action = "clear")
-        clipboard := ""
+}
+
+
+
+msg_timer() {
+    tool_id := winExist("ahk_class tooltips_class32")
+    mouseGetPos, , , id_under   ; under cursor
+    if (id_under != tool_id)
+        {
+        setTimer, msg_timer, off
+        toolTip, 
+        }
 }
 
 
