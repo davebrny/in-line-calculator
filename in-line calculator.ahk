@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.7
+version     = 1.7.1
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -48,7 +48,7 @@ if (enable_hotstrings = "yes")
         loop, 10
             hotkey, % "~numpad" . a_index - 1, inline_hotstring, on
         hotkey, ~numpadSub, inline_hotstring, on
-        hotkey, ~numpadDot, inline_hotstring, on   
+        hotkey, ~numpadDot, inline_hotstring, on
         }
     }
 if (enable_hotkeys = "yes")
@@ -72,6 +72,8 @@ end_keys =
 {F12}{F13}{F14}{F15}{F16}{F17}{F18}{F19}{F20}{F21}{F22}{F23}{F24}
 )
 
+calculator_state = off
+
 return  ; end of auto-execute ---------------------------------------------------
 
 
@@ -83,7 +85,7 @@ return  ; end of auto-execute --------------------------------------------------
 
 
 inline_hotstring:
-if (calculator_state != "active")
+if (calculator_state = "off")
     {
     calculator("on")
 
@@ -181,13 +183,13 @@ calculator(mode) {
     global
     if (mode = "on")
         {
-        calculator_state := "active"
+        calculator_state := "on"
         menu, tray, icon, % script_icon, 2  ; plus icon
         }
     else
         {
         this_endkey =  ; clear
-        calculator_state := "idle"
+        calculator_state := "off"
         menu, tray, icon, % script_icon, 1  ; default icon
         }
 }
