@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.6.8
+version     = 1.7
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -35,16 +35,21 @@ groupAdd, calculators, ahk_exe numbers.exe                     ; windows 8 Metro
 hotkey, ifWinNotActive, ahk_group calculators
 if (enable_hotstrings = "yes")
     {
-    loop, 10
-        {
-        if (enable_number_row = "yes")    ; set 0 to 9
-            hotkey, % "~" . a_index - 1, inline_hotstring, on
-        if (enable_number_pad = "yes")    ; set 0 to 9 on numberpad
-            hotkey, % "~numpad" . a_index - 1, inline_hotstring, on
-        }
-    hotkey, ~- , inline_hotstring, on  ; other keys that can activate the calculator
-    hotkey, ~. , inline_hotstring, on
     hotkey, ~( , inline_hotstring, on
+    if (enable_number_row = "yes")
+        {
+        loop, 10
+            hotkey, % "~" . a_index - 1, inline_hotstring, on
+        hotkey, ~- , inline_hotstring, on
+        hotkey, ~. , inline_hotstring, on
+        }
+    if (enable_number_pad = "yes")
+        {
+        loop, 10
+            hotkey, % "~numpad" . a_index - 1, inline_hotstring, on
+        hotkey, ~numpadSub, inline_hotstring, on
+        hotkey, ~numpadDot, inline_hotstring, on   
+        }
     }
 if (enable_hotkeys = "yes")
     {
@@ -61,11 +66,10 @@ end_keys =
 {delete}{backspace}{tab}{LWin}{rWin}{LControl}{rControl}{LAlt}{rAlt}{printScreen}
 {home}{end}{insert}{pgUp}{pgDn}{numlock}{scrollLock}{help}{appsKey}{pause}{sleep}
 {ctrlBreak}{capsLock}{numpadEnter}{numpadUp}{numpadDown}{numpadLeft}{numpadRight}
-{numpadAdd}{numpadSub}{numpadMult}{numpadDiv}{numpadClear}{numpadHome}{numpadEnd}
-{numpadPgUp}{numpadPgDn}{numpadIns}{numpadDel}{browser_back}{browser_forward}
-{browser_refresh}{browser_stop}{browser_search}{browser_favorites}{browser_home}
-{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{F13}{F14}{F15}{F16}{F17}{F18}
-{F19}{F20}{F21}{F22}{F23}{F24}
+{numpadClear}{numpadHome}{numpadEnd}{numpadPgUp}{numpadPgDn}{numpadIns}{numpadDel}
+{browser_back}{browser_forward}{browser_refresh}{browser_stop}{browser_search}
+{browser_favorites}{browser_home}{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}
+{F12}{F13}{F14}{F15}{F16}{F17}{F18}{F19}{F20}{F21}{F22}{F23}{F24}
 )
 
 return  ; end of auto-execute ---------------------------------------------------
@@ -83,17 +87,20 @@ if (calculator_state != "active")
     {
     calculator("on")
 
-    this_input := LTrim(a_thisHotkey, "~")
+    stringReplace, this_input, a_thisHotkey, ~, ,
+    stringReplace, this_input, this_input  , numpad, ,
+    stringReplace, this_input, this_input  , dot, .,
+    stringReplace, this_input, this_input  , sub, -,
     active_window := winExist("a")
 
     loop,
         {
         input, new_input, V %timeout%, %end_keys%
-        this_input .= new_input  ; append
+        this_input .= new_input    ; append
         this_endkey := strReplace(errorLevel, "EndKey:", "")
         if (this_endkey = "backspace")    ; trim and continue with loop/input
             stringTrimRight, this_input, this_input, 1
-        else break  ; if any other end key
+        else break ; if any other end key
         }
 
     if (this_endkey != "=") and (this_endkey != "#")
