@@ -1,6 +1,6 @@
 # in-line calculator
 
-<a href="url"><img src="https://www.dropbox.com/s/w1px3ndelvux630/In-line%20Calculator.ico?raw=1" align="middle" height="48" width="48" ></a><br></br>
+<a href="url"><img src="http://i.imgur.com/xlONmxY.gif"></a><br></br>
 
 
 
@@ -13,14 +13,14 @@ A calculator for Windows that lets you do basic math without having to leave the
 
 #### Where can it be used?
 
-Almost anywhere in windows where you can enter text. Any text editor, search box or command line... even the text edit box that you use to rename a file in file explorer.  
+Almost anywhere in windows where you can enter text. Any text editor, search box or command line... even the text edit box that you use to rename files.  
 &nbsp;  
 
 
 
 #### How does it work?
 
-Type out an equation, then use one of the two end keys below to calculate it
+Type out an equation, then use one of the two end keys to calculate it
 
 ```
 5p5
@@ -88,15 +88,15 @@ Select an equation and use one of the following hotkeys:
 <kbd>alt</kbd> + <kbd>=</kbd> &nbsp; Leaves the result only  
 <kbd>alt</kbd> + <kbd>#</kbd> &nbsp; Equation & result  
 
+*This feature uses the clipboard to get the equation text and paste it back again so if its used on static text (like on this page) then the result will be shown in a tooltip message instead.*  
 
-*(This feature uses the clipboard to get the equation text and paste it back again so it only works in places where you can copy and paste text)*  
 &nbsp;
 
 
 
 **Add numbers quickly**
 
-If there are no math symbols in the selected text, then every space between the numbers will be replaced with pluses.  
+When selecting an equation, if there are no math symbols in the selected text, then every space between the numbers will be replaced with pluses.  
 `100 200 300` will become `100+200+300`
 
 &nbsp;
@@ -109,3 +109,31 @@ The keys &nbsp; <kbd>a</kbd> <kbd>b</kbd> <kbd>d</kbd> <kbd>p</kbd> <kbd>s</kbd>
 The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>
 
 &nbsp;
+
+
+## Options
+
+**Calculator Timeout**  
+
+After you start typing an equation you have 60 seconds until the calculator turns off. To change this, set `timeout` in the **settings.ini** file to `T120` for 120 seconds, `T30` for 30 seconds or leave it blank to disable the timeout altogether.
+
+**Enable/Disable**  
+
+If you have a keyboard with a number pad and wont be using the number row keys then you can set `enable_number_row` to `no` to stop them from triggering the calculator.
+
+To disable both the number row and number pad keys and use only the "select equation" feature then set `enable_hotstrings` to `no`.
+
+> Any time you make changes to the settings you will need to select "Reload This Script" from the tray icon.
+
+
+**Start With Windows**  
+
+To have the script start when windows boots up, select "Start With Windows" from the tray icon.
+
+&nbsp;
+
+---
+
+### Credits
+
+Laszlo, Oldman and many others from the AHK community.
