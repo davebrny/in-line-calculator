@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.7.1
+version     = 1.7.2
 description = calculate basic math without leaving the line you're typing on
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -134,6 +134,7 @@ if equation not contains +,-,*,/         ; convert spaces to pluses
     stringReplace, equation, equation, % a_space, +, all
 
 goSub, calculate_equation
+goSub, clear_vars
 return
 
 
@@ -186,11 +187,11 @@ calculator(mode) {
         calculator_state := "on"
         menu, tray, icon, % script_icon, 2  ; plus icon
         }
-    else
+    else if (mode = "off")
         {
-        this_endkey =  ; clear
         calculator_state := "off"
         menu, tray, icon, % script_icon, 1  ; default icon
+        goSub, clear_vars
         }
 }
 
@@ -221,7 +222,10 @@ clipboard(action="") {
         sleep 100
         }
     else if (action = "restore")
+        {
         clipboard := clipboard_r
+        clipboard_r := ""
+        }
 }
 
 
@@ -235,6 +239,16 @@ msg_timer() {
         toolTip, 
         }
 }
+
+
+
+clear_vars:
+this_endkey := ""
+this_input  := ""
+new_input   := ""
+equation    := ""
+selected    := ""
+return
 
 
 
