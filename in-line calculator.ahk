@@ -1,7 +1,7 @@
 /*
 [script info]
-version     = 1.7.2
-description = calculate basic math without leaving the line you're typing on
+version     = 1.7.3
+description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
 */
@@ -12,18 +12,16 @@ source      = https://github.com/davebrny/in-line-calculator
 sendMode input
 
     ;# ini settings
-ini := a_scriptDir "\settings.ini"
-iniRead, enable_hotstrings, % ini, settings, enable_hotstrings
-iniRead, enable_number_row, % ini, settings, enable_number_row
-iniRead, enable_number_pad, % ini, settings, enable_number_pad
-iniRead, enable_hotkeys,    % ini, settings, enable_hotkeys
-iniRead, timeout,           % ini, settings, timeout
+iniRead, enable_hotstrings, % a_scriptDir "\settings.ini", settings, enable_hotstrings
+iniRead, enable_number_row, % a_scriptDir "\settings.ini", settings, enable_number_row
+iniRead, enable_number_pad, % a_scriptDir "\settings.ini", settings, enable_number_pad
+iniRead, enable_hotkeys,    % a_scriptDir "\settings.ini", settings, enable_hotkeys
+iniRead, timeout,           % a_scriptDir "\settings.ini", settings, timeout
 
     ;# tray menu stuff
 if (a_isCompiled = 1)
     menu, tray, add, Reload This Script, reload
-script_icon := a_scriptDir "\in-line calculator.ico"
-menu, tray, icon, % script_icon
+menu, tray, icon, % a_scriptDir "\in-line calculator.ico"
 start_with_windows(1)    ; add the option to start the script when windows boots
 
     ;# group calculator apps
@@ -72,7 +70,7 @@ end_keys =
 {F12}{F13}{F14}{F15}{F16}{F17}{F18}{F19}{F20}{F21}{F22}{F23}{F24}
 )
 
-calculator_state = off
+calculator_state := "off"
 
 return  ; end of auto-execute ---------------------------------------------------
 
@@ -89,10 +87,10 @@ if (calculator_state = "off")
     {
     calculator("on")
 
-    stringReplace, this_input, a_thisHotkey, ~, ,
-    stringReplace, this_input, this_input  , numpad, ,
-    stringReplace, this_input, this_input  , dot, .,
-    stringReplace, this_input, this_input  , sub, -,
+    stringReplace, this_input, a_thisHotkey, ~     ,  ,
+    stringReplace, this_input, this_input  , numpad,  ,
+    stringReplace, this_input, this_input  , dot   , .,
+    stringReplace, this_input, this_input  , sub   , -,
     active_window := winExist("a")
 
     loop,
@@ -130,7 +128,7 @@ clipboard("restore")
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(). \E]")
     return    ; only continue if numbers, +/-*.() or spaces
 
-if equation not contains +,-,*,/         ; convert spaces to pluses
+if equation not contains +,-,*,/    ; convert spaces to pluses
     stringReplace, equation, equation, % a_space, +, all
 
 goSub, calculate_equation
@@ -159,7 +157,7 @@ if (result != "")
     if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
         {
         clipboard("get")
-        if (clipboard = selected)  ; if clipboard wasnt pasted
+        if (clipboard = selected)    ; if clipboard wasnt pasted
             {
             toolTip, % result
             setTimer, msg_timer, 2500
@@ -185,12 +183,12 @@ calculator(mode) {
     if (mode = "on")
         {
         calculator_state := "on"
-        menu, tray, icon, % script_icon, 2  ; plus icon
+        menu, tray, icon, % a_scriptDir "\in-line calculator.ico", 2  ; plus icon
         }
     else if (mode = "off")
         {
         calculator_state := "off"
-        menu, tray, icon, % script_icon, 1  ; default icon
+        menu, tray, icon, % a_scriptDir "\in-line calculator.ico", 1  ; default icon
         goSub, clear_vars
         }
 }
@@ -232,11 +230,11 @@ clipboard(action="") {
 
 msg_timer() {
     tool_id := winExist("ahk_class tooltips_class32")
-    mouseGetPos, , , id_under   ; under cursor
+    mouseGetPos, , , id_under   ; id under cursor
     if (id_under != tool_id)
         {
         setTimer, msg_timer, off
-        toolTip, 
+        toolTip,
         }
 }
 
