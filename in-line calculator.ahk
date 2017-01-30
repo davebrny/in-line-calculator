@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.7.3
+version     = 1.8
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -125,8 +125,8 @@ selected := clipboard
 equation := convert_letters( trim(selected) )
 clipboard("restore")
 
-if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(). \E]")
-    return    ; only continue if numbers, +/-*.() or spaces
+if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(),. \E]")
+    return    ; only continue if numbers, +/-*,.() or spaces
 
 if equation not contains +,-,*,/    ; convert spaces to pluses
     stringReplace, equation, equation, % a_space, +, all
@@ -138,11 +138,16 @@ return
 
 
 calculate_equation:
-result := eval(equation)    ; convert string to expression
+result := eval(strReplace(equation, ",", ""))    ; convert string to expression
 if (result != "")
     {
-    if inStr(result, ".")    ; trim trailing .000
-        result := rTrim( rTrim(result, "0"), ".")
+    if inStr(equation, ",")    ; add comma back in to numbers over 1,000
+        {
+        stringSplit, split, result, .
+        result := regExReplace(split1, "(\d)(?=(?:\d{3})+(?:\.|$))", "$1,") "." split2
+        }
+    if inStr(result, ".")
+        result := rTrim( rTrim(result, "0"), ".")       ; trim trailing .000
 
     if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
          send % "{backspace}"                           ; delete selected text
