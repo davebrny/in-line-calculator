@@ -6,8 +6,8 @@
 
 #### What's this?
 
-An interfaceless calculator for Windows that lets you do basic math without having to leave the line you're typing on.  
-&nbsp;  
+An interface-less calculator for Windows that lets you do basic math without having to leave the line you're typing on.  
+&nbsp;
 
 
 
@@ -79,9 +79,11 @@ The keys that can then be used are:
 
 - &nbsp; `0` - `9` &nbsp; (number row or number pad)  
 - &nbsp; `+` `-` `*` `/`  
-- &nbsp; `.` `(` `)`  
-- &nbsp; `a` `b` `d` `m` `p` `s` `t` `x` and `space`  
+- &nbsp; `.` `,` `(` `)`  
+- &nbsp; `a` `b` `d` `m` `p` `s` `t` `x`  
+- &nbsp; `space`  `backspace`  
 
+&nbsp;
 
 
 Any other keys that are pressed will turn the calculator off again. For example, typing the date `23rd` will trigger the calculator but once the letter `r` is typed the calculator will be switched off again. Typing something like `5pw5=` won't calculate anything since the `w` key would have turned the calculator off.
@@ -105,10 +107,10 @@ Any other keys that are pressed will turn the calculator off again. For example,
 
 Select an equation and use one of the following hotkeys:
 
-<kbd>alt</kbd> + <kbd>=</kbd> &nbsp; Leaves the result only  
+<kbd>alt</kbd> + <kbd>=</kbd> &nbsp; Result only  
 <kbd>alt</kbd> + <kbd>#</kbd> &nbsp; Equation & result  
 
-*This feature uses the clipboard to get the equation text and paste it back again so if it's used on static text (like on this page) then the result will be shown in a tooltip message instead.*  
+*This feature uses the clipboard to get the equation text and paste it back again so if it's used on static text (like on this page) where the result can't be pasted, then it will be shown in a tooltip message instead.*  
 
 &nbsp;
 
@@ -125,7 +127,7 @@ When selecting an equation, if there are no math symbols in the selected text, t
 
 **Windows calculator**
 
-The keys &nbsp; <kbd>a</kbd> <kbd>b</kbd> <kbd>d</kbd> <kbd>p</kbd> <kbd>s</kbd> <kbd>t</kbd> <kbd>x</kbd> &nbsp; are remapped to send the corresponding math symbols when Windows calculator is open.   
+The keys &nbsp; <kbd>a</kbd> <kbd>b</kbd> <kbd>d</kbd> <kbd>p</kbd> <kbd>m</kbd> <kbd>s</kbd> <kbd>t</kbd> <kbd>x</kbd> &nbsp; are remapped to send the corresponding math symbols when Windows calculator is open.   
 The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>
 
 &nbsp;
