@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 1.8
+version     = 2.0
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -13,8 +13,6 @@ sendMode input
 
     ;# ini settings
 iniRead, enable_hotstrings, % a_scriptDir "\settings.ini", settings, enable_hotstrings
-iniRead, enable_number_row, % a_scriptDir "\settings.ini", settings, enable_number_row
-iniRead, enable_number_pad, % a_scriptDir "\settings.ini", settings, enable_number_pad
 iniRead, enable_hotkeys,    % a_scriptDir "\settings.ini", settings, enable_hotkeys
 iniRead, timeout,           % a_scriptDir "\settings.ini", settings, timeout
 
@@ -27,28 +25,12 @@ start_with_windows(1)    ; add the option to start the script when windows boots
     ;# group calculator apps
 groupAdd, calculators, Calculator ahk_exe ApplicationFrameHost.exe  ; windows 10
 groupAdd, calculators, ahk_class CalcFrame                     ; windows classic
-groupAdd, calculators, ahk_exe numbers.exe                     ; windows 8 Metro
+groupAdd, calculators, ahk_exe numbers.exe                     ; windows 8
 
     ;# set hotstrings & hotkeys
 hotkey, ifWinNotActive, ahk_group calculators
 if (enable_hotstrings = "yes")
-    {
-    hotkey, ~( , inline_hotstring, on
-    if (enable_number_row = "yes")
-        {
-        loop, 10
-            hotkey, % "~" . a_index - 1, inline_hotstring, on
-        hotkey, ~- , inline_hotstring, on
-        hotkey, ~. , inline_hotstring, on
-        }
-    if (enable_number_pad = "yes")
-        {
-        loop, 10
-            hotkey, % "~numpad" . a_index - 1, inline_hotstring, on
-        hotkey, ~numpadSub, inline_hotstring, on
-        hotkey, ~numpadDot, inline_hotstring, on
-        }
-    }
+    hotkey, ~`` , inline_hotstring, on
 if (enable_hotkeys = "yes")
     {
     hotkey, !=, inline_hotkey, on
@@ -122,7 +104,7 @@ inline_hotkey:
 clipboard("save")
 clipboard("get")
 selected := clipboard
-equation := convert_letters( trim(selected) )
+equation := convert_letters(trim(selected))
 clipboard("restore")
 
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(),. \E]")
