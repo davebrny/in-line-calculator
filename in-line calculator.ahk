@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.0
+version     = 2.1
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -73,6 +73,7 @@ if (calculator_state = "off")
     stringReplace, this_input, this_input  , numpad,  ,
     stringReplace, this_input, this_input  , dot   , .,
     stringReplace, this_input, this_input  , sub   , -,
+    stringReplace, this_input, this_input  , ``    ,  ,
     active_window := winExist("a")
 
     loop,
@@ -133,7 +134,7 @@ if (result != "")
 
     if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
          send % "{backspace}"                           ; delete selected text
-    else send % "{backspace " strLen(equation) + 1 "}"  ; delete hotstring input
+    else send % "{backspace " strLen(equation) + 2 "}"  ; delete hotstring input
 
     clipboard("save")
     if (this_endkey = "=") or (a_thisHotkey = "!=")
