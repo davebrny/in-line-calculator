@@ -15,6 +15,7 @@ sendMode input
 iniRead, enable_hotstrings, % a_scriptDir "\settings.ini", settings, enable_hotstrings
 iniRead, enable_hotkeys,    % a_scriptDir "\settings.ini", settings, enable_hotkeys
 iniRead, timeout,           % a_scriptDir "\settings.ini", settings, timeout
+iniRead, trigger_key,       % a_scriptDir "\settings.ini", settings, trigger_key
 
     ;# tray menu stuff
 if (a_isCompiled = 1)
@@ -30,7 +31,7 @@ groupAdd, calculators, ahk_exe numbers.exe                     ; windows 8
     ;# set hotstrings & hotkeys
 hotkey, ifWinNotActive, ahk_group calculators
 if (enable_hotstrings = "yes")
-    hotkey, ~`` , inline_hotstring, on
+    hotkey, ~%trigger_key%, inline_hotstring, on
 if (enable_hotkeys = "yes")
     {
     hotkey, !=, inline_hotkey, on
@@ -73,7 +74,7 @@ if (calculator_state = "off")
     stringReplace, this_input, this_input  , numpad,  ,
     stringReplace, this_input, this_input  , dot   , .,
     stringReplace, this_input, this_input  , sub   , -,
-    stringReplace, this_input, this_input  , ``    ,  ,
+    stringReplace, this_input, this_input  , %trigger_key%,  ,
     active_window := winExist("a")
 
     loop,
@@ -121,7 +122,7 @@ return
 
 
 calculate_equation:
-result := eval(strReplace(equation, ",", ""))    ; convert string to expression
+result := eval( strReplace(equation, ",", "") )    ; convert string to expression
 if (result != "")
     {
     if inStr(equation, ",")    ; add comma back in to numbers over 1,000
@@ -157,15 +158,6 @@ return
 
 
 
-;   █   █   █   █   █   █   █   █   █   █   █   █
-
-
-
-turn_calculator_off:
-calculator("off")
-return
-
-
 calculator(mode) {
     global
     if (mode = "on")
@@ -181,6 +173,10 @@ calculator(mode) {
         }
 }
 
+turn_calculator_off:
+calculator("off")
+return
+
 
 
 convert_letters(string) {
@@ -188,30 +184,6 @@ convert_letters(string) {
                            , "x":"*", "t":"*", "b":"*", "d":"/"}
         stringReplace, string, string, % letters, % symbols, all
     return string
-}
-
-
-
-clipboard(action="") {
-    global
-    if (action = "save")
-        clipboard_r := clipboardAll
-    else if (action = "get")
-        {
-        clipboard := ""
-        send ^{c}
-        clipWait, 0.3
-        }
-    else if (action = "paste")
-        {
-        send, ^{v}
-        sleep 100
-        }
-    else if (action = "restore")
-        {
-        clipboard := clipboard_r
-        clipboard_r := ""
-        }
 }
 
 

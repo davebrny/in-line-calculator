@@ -20,10 +20,10 @@ Almost anywhere in windows where you can enter text. Any text editor, search box
 
 #### How do you use it?
 
-Press the grave key (backtick) to activate the calculator, type out an equation, then use one of the two end keys to calculate it
+Press the equals key to activate the calculator, type out an equation, then use one of the two end keys to calculate it
 
 ```
-`5p5
+=5p5
 ```
 
 The &nbsp; <kbd>**=**</kbd> &nbsp; key deletes the equation and pastes the answer:  
@@ -73,7 +73,7 @@ Some examples:
 
 #### How does it work?
 
-When you press the grave key, the calculator will turn on and start logging the following keys:  
+When you press the equals key, the calculator will turn on and start logging the following keys:  
 
 - &nbsp; `0` - `9` &nbsp; (number row or number pad)  
 - &nbsp; `+` `-` `*` `/`  
@@ -82,7 +82,8 @@ When you press the grave key, the calculator will turn on and start logging the 
 - &nbsp; `space`  `backspace`  
 
 
-If a key is pressed that isn't in the above list then the calculator will turn off and anything that was typed will be cleared from memory. For example, typing `5pw5=` won't calculate anything since the `w` key would have turned the calculator off.
+If a key is pressed that isn't in the above list then the calculator will turn off and anything that was typed will be cleared from memory. 
+For example, typing `=5pw5=` won't calculate anything since the `w` key would have turned the calculator off.
 
 
 > *The tray icon can be used to check what state the calculator is in. If the calculator is on the icon will be a "plus" symbol, if it's off then it will be showing the default "equal" symbol.  
@@ -95,7 +96,7 @@ You can use the escape key at any time to reset or turn off the calculator*
 ---
 
 
-## Other Features
+## Other features
 
 
 
@@ -131,18 +132,25 @@ The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>
 
 ## Options
 
-**Calculator Timeout**  
-
-After you start typing an equation you have 60 seconds until the calculator turns off. To change this, set `timeout` in the **settings.ini** file to `T120` for 120 seconds, `T30` for 30 seconds or leave it blank to disable the timeout altogether.
-
 **Enable/Disable**  
 
 To disable both the number row and number pad keys and use the "select equation" feature only, set `enable_hotstrings` to `no`.
 
+
+**Custom trigger key**
+
+The key that triggers the hotstring can be changed to something else beside the equals key.
+
+
+**Calculator timeout**  
+
+After you start typing an equation you have 60 seconds until the calculator turns off. To change this, set `timeout` in the **settings.ini** file to `T120` for 120 seconds, `T30` for 30 seconds or leave it blank to disable the timeout altogether.
+
+
 > Any time you make changes to the settings you will need to select "Reload This Script" from the tray icon.
 
 
-**Start With Windows**  
+**Start with windows**  
 
 To have the script start when windows boots up, select "Start With Windows" from the tray icon.
 
