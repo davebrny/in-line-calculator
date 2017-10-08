@@ -82,7 +82,7 @@ When you press the equals key, the calculator will turn on and start logging the
 - &nbsp; `space`  `backspace`  
 
 
-If a key is pressed that isn't in the above list then the calculator will turn off and anything that was typed will be cleared from memory. 
+If a key is pressed that isn't in the above list then the calculator will turn off and anything that was typed will be cleared from memory.
 For example, typing `=5pw5=` won't calculate anything since the `w` key would have turned the calculator off.
 
 
@@ -100,7 +100,7 @@ You can use the escape key at any time to reset or turn off the calculator*
 
 
 
-**Select an equation**
+**Select an equation**  
 
 Select an equation and use one of the following hotkeys:
 
@@ -113,7 +113,7 @@ Select an equation and use one of the following hotkeys:
 
 
 
-**Add numbers quickly**
+**Add numbers quickly**  
 
 When selecting an equation, if there are no math symbols in the selected text, then every space between the numbers will be replaced with pluses.  
 `100 200 300` will become `100+200+300`
@@ -122,7 +122,7 @@ When selecting an equation, if there are no math symbols in the selected text, t
 
 
 
-**Windows calculator**
+**Windows calculator**  
 
 The keys &nbsp; <kbd>a</kbd> <kbd>b</kbd> <kbd>d</kbd> <kbd>p</kbd> <kbd>m</kbd> <kbd>s</kbd> <kbd>t</kbd> <kbd>x</kbd> &nbsp; are remapped to send the corresponding math symbols when Windows calculator is open.   
 The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>
@@ -132,22 +132,26 @@ The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>
 
 ## Options
 
+*(Any time you make any changes to the `settings.ini` file you will need to select "Reload This Script" from the tray icon to update the script with the new settings)*   
+
+
+**Custom trigger key**  
+
+The key that triggers the calculator can be changed to something else beside the equals key.  
+To have any of the number keys be the trigger that starts the calculator, leave `trigger_key` empty.
+
+> Triggering with the number keys can sometimes calculate things that aren't equations. This can happen in situations where you're typing a date like "31-12-2017" and then happen to use one of the end keys right after.  One way of avoiding this is by remembering to press the `escape` key to turn off the calculator before pressing an end key. If you forget to do that then `ctrl + z` can always be used to undo the calculation.
+
+
 **Enable/Disable**  
 
 To disable both the number row and number pad keys and use the "select equation" feature only, set `enable_hotstrings` to `no`.
-
-
-**Custom trigger key**
-
-The key that triggers the hotstring can be changed to something else beside the equals key.
+There are also options to disable either the number row or the number pad keys which is useful if you're using the number keys to trigger the calculator and want to have one set of keys that wont trigger anything.  
 
 
 **Calculator timeout**  
 
-After you start typing an equation you have 60 seconds until the calculator turns off. To change this, set `timeout` in the **settings.ini** file to `T120` for 120 seconds, `T30` for 30 seconds or leave it blank to disable the timeout altogether.
-
-
-> Any time you make changes to the settings you will need to select "Reload This Script" from the tray icon.
+The default time the calculator will stay on after typing an equation is 60 seconds. This is so the calculator doesn't stay on when you use one of the trigger keys but don't intend to use the calculator. Change `timeout` to `T120` for 120 seconds, `T30` for 30 seconds or leave it blank to disable the timeout altogether.
 
 
 **Start with windows**  

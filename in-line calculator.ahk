@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.1
+version     = 2.3
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -13,6 +13,8 @@ sendMode input
 
     ;# ini settings
 iniRead, enable_hotstrings, % a_scriptDir "\settings.ini", settings, enable_hotstrings
+iniRead, enable_number_row, % a_scriptDir "\settings.ini", settings, enable_number_row
+iniRead, enable_number_pad, % a_scriptDir "\settings.ini", settings, enable_number_pad
 iniRead, enable_hotkeys,    % a_scriptDir "\settings.ini", settings, enable_hotkeys
 iniRead, timeout,           % a_scriptDir "\settings.ini", settings, timeout
 iniRead, trigger_key,       % a_scriptDir "\settings.ini", settings, trigger_key
@@ -31,7 +33,24 @@ groupAdd, calculators, ahk_exe numbers.exe                     ; windows 8
     ;# set hotstrings & hotkeys
 hotkey, ifWinNotActive, ahk_group calculators
 if (enable_hotstrings = "yes")
-    hotkey, ~%trigger_key%, inline_hotstring, on
+    {
+    if (trigger_key)
+        {
+        hotkey, ~%trigger_key%, inline_hotstring, on
+        delete_n := "2"
+        }
+    else  ; trigger with any number key
+        {
+        loop, 10
+            {
+            if (enable_number_row = "yes")    ; set 0 to 9 on the number row
+                hotkey, % "~" . a_index - 1, inline_hotstring, on
+            if (enable_number_pad = "yes")    ; set 0 to 9 on the numberpad
+                hotkey, % "~numpad" . a_index - 1, inline_hotstring, on 
+            }
+        delete_n := "1"
+        }
+    }
 if (enable_hotkeys = "yes")
     {
     hotkey, !=, inline_hotkey, on
@@ -134,8 +153,8 @@ if (result != "")
         result := rTrim( rTrim(result, "0"), ".")       ; trim trailing .000
 
     if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
-         send % "{backspace}"                           ; delete selected text
-    else send % "{backspace " strLen(equation) + 2 "}"  ; delete hotstring input
+         send % "{backspace}"                                  ; delete selected text
+    else send % "{backspace " strLen(equation) + delete_n "}"  ; delete hotstring input
 
     clipboard("save")
     if (this_endkey = "=") or (a_thisHotkey = "!=")
