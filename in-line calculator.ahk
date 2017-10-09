@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.4
+version     = 2.4.2
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -40,14 +40,22 @@ if (enable_hotstrings = "yes")
         hotkey, ~%trigger_key%, inline_hotstring, on
         delete_n := "2"
         }
-    else  ; trigger with any number key
+    else  ; trigger with any number key or -.(
         {
-        loop, 10
+        if (enable_number_row = "yes")
             {
-            if (enable_number_row = "yes")    ; set 0 to 9 on the number row
+            loop, 10    ; set 0 to 9 on the number row
                 hotkey, % "~" . a_index - 1, inline_hotstring, on
-            if (enable_number_pad = "yes")    ; set 0 to 9 on the numberpad
+            hotkey, ~- , inline_hotstring, on
+            hotkey, ~. , inline_hotstring, on
+            hotkey, ~( , inline_hotstring, on
+            }
+        if (enable_number_pad = "yes")
+            {
+            loop, 10    ; set 0 to 9 on the numberpad
                 hotkey, % "~numpad" . a_index - 1, inline_hotstring, on 
+            hotkey, ~numpadDot, inline_hotstring, on
+            hotkey, ~numpadSub, inline_hotstring, on
             }
         delete_n := "1"
         }
@@ -213,15 +221,13 @@ convert_letters(string) {
 
 
 
-msg_timer() {
-    tool_id := winExist("ahk_class tooltips_class32")
-    mouseGetPos, , , id_under   ; id under cursor
-    if (id_under != tool_id)
-        {
-        setTimer, msg_timer, off
-        toolTip,
-        }
-}
+numpadEnter_endKey:
+if getKeyState("numLock", "T") and (trigger_key != "")
+    {
+    send, {backspace}{%trigger_key%}
+    goSub, inline_hotstring
+    }
+return
 
 
 
@@ -231,25 +237,6 @@ this_input  := ""
 new_input   := ""
 equation    := ""
 selected    := ""
-return
-
-
-
-reload:
-reload
-sleep 1000
-msgBox, 4, , The script could not be reloaded and will need to be manually restarted. Would you like Exit?
-ifMsgBox, yes, exitApp
-return
-
-
-
-numpadEnter_endKey:
-if getKeyState("numLock", "T") and (trigger_key != "")
-    {
-    send, {backspace}{%trigger_key%}
-    goSub, inline_hotstring
-    }
 return
 
 
@@ -268,3 +255,24 @@ d::send, {/}    ; divide
 =::send, {enter}
 
 #ifWinActive
+
+
+
+msg_timer() {
+    tool_id := winExist("ahk_class tooltips_class32")
+    mouseGetPos, , , id_under   ; id under cursor
+    if (id_under != tool_id)
+        {
+        setTimer, msg_timer, off
+        toolTip,
+        }
+}
+
+
+
+reload:
+reload
+sleep 1000
+msgBox, 4, , The script could not be reloaded and will need to be manually restarted. Would you like Exit?
+ifMsgBox, yes, exitApp
+return
