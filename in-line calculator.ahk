@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.4
+version     = 2.5
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -178,6 +178,7 @@ if (result != "")
             }
         }
     clipboard("restore")
+    wait_for_ctrlZ()
     }
 return
 
@@ -213,15 +214,13 @@ convert_letters(string) {
 
 
 
-msg_timer() {
-    tool_id := winExist("ahk_class tooltips_class32")
-    mouseGetPos, , , id_under   ; id under cursor
-    if (id_under != tool_id)
-        {
-        setTimer, msg_timer, off
-        toolTip,
-        }
-}
+numpadEnter_endKey:
+if getKeyState("numLock", "T") and (trigger_key != "")
+    {
+    send, {backspace}{%trigger_key%}
+    goSub, inline_hotstring
+    }
+return
 
 
 
@@ -231,25 +230,6 @@ this_input  := ""
 new_input   := ""
 equation    := ""
 selected    := ""
-return
-
-
-
-reload:
-reload
-sleep 1000
-msgBox, 4, , The script could not be reloaded and will need to be manually restarted. Would you like Exit?
-ifMsgBox, yes, exitApp
-return
-
-
-
-numpadEnter_endKey:
-if getKeyState("numLock", "T") and (trigger_key != "")
-    {
-    send, {backspace}{%trigger_key%}
-    goSub, inline_hotstring
-    }
 return
 
 
@@ -268,3 +248,24 @@ d::send, {/}    ; divide
 =::send, {enter}
 
 #ifWinActive
+
+
+
+msg_timer() {
+    tool_id := winExist("ahk_class tooltips_class32")
+    mouseGetPos, , , id_under   ; id under cursor
+    if (id_under != tool_id)
+        {
+        setTimer, msg_timer, off
+        toolTip,
+        }
+}
+
+
+
+reload:
+reload
+sleep 1000
+msgBox, 4, , The script could not be reloaded and will need to be manually restarted. Would you like Exit?
+ifMsgBox, yes, exitApp
+return
