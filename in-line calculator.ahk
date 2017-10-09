@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.3
+version     = 2.4
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -12,12 +12,13 @@ source      = https://github.com/davebrny/in-line-calculator
 sendMode input
 
     ;# ini settings
-iniRead, enable_hotstrings, % a_scriptDir "\settings.ini", settings, enable_hotstrings
-iniRead, enable_number_row, % a_scriptDir "\settings.ini", settings, enable_number_row
-iniRead, enable_number_pad, % a_scriptDir "\settings.ini", settings, enable_number_pad
-iniRead, enable_hotkeys,    % a_scriptDir "\settings.ini", settings, enable_hotkeys
-iniRead, timeout,           % a_scriptDir "\settings.ini", settings, timeout
-iniRead, trigger_key,       % a_scriptDir "\settings.ini", settings, trigger_key
+iniRead, enable_hotstrings,  % a_scriptDir "\settings.ini", settings, enable_hotstrings
+iniRead, enable_number_row,  % a_scriptDir "\settings.ini", settings, enable_number_row
+iniRead, enable_number_pad,  % a_scriptDir "\settings.ini", settings, enable_number_pad
+iniRead, numpadEnter_endKey, % a_scriptDir "\settings.ini", settings, numpadEnter_endKey
+iniRead, enable_hotkeys,     % a_scriptDir "\settings.ini", settings, enable_hotkeys
+iniRead, timeout,            % a_scriptDir "\settings.ini", settings, timeout
+iniRead, trigger_key,        % a_scriptDir "\settings.ini", settings, trigger_key
 
     ;# tray menu stuff
 if (a_isCompiled = 1)
@@ -50,6 +51,8 @@ if (enable_hotstrings = "yes")
             }
         delete_n := "1"
         }
+    if (numpadEnter_endKey = "yes")
+        hotkey, ~numpadEnter, numpadEnter_endKey, on
     }
 if (enable_hotkeys = "yes")
     {
@@ -91,6 +94,7 @@ if (calculator_state = "off")
 
     stringReplace, this_input, a_thisHotkey, ~     ,  ,
     stringReplace, this_input, this_input  , numpad,  ,
+    stringReplace, this_input, this_input  , enter ,  ,
     stringReplace, this_input, this_input  , dot   , .,
     stringReplace, this_input, this_input  , sub   , -,
     stringReplace, this_input, this_input  , %trigger_key%,  ,
@@ -105,6 +109,8 @@ if (calculator_state = "off")
             stringTrimRight, this_input, this_input, 1
         else break ; if any other end key
         }
+    if (this_endkey = "numpadEnter") and (numpadEnter_endKey = "yes")
+        this_endkey := "="
 
     if (this_endkey != "=") and (this_endkey != "#")
         goTo, turn_calculator_off
@@ -234,6 +240,16 @@ reload
 sleep 1000
 msgBox, 4, , The script could not be reloaded and will need to be manually restarted. Would you like Exit?
 ifMsgBox, yes, exitApp
+return
+
+
+
+numpadEnter_endKey:
+if getKeyState("numLock", "T") and (trigger_key != "")
+    {
+    send, {backspace}{%trigger_key%}
+    goSub, inline_hotstring
+    }
 return
 
 

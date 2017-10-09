@@ -149,6 +149,11 @@ To disable both the number row and number pad keys and use the "select equation"
 There are also options to disable either the number row or the number pad keys which is useful if you're using the number keys to trigger the calculator and want to have one set of keys that wont trigger anything.  
 
 
+**NumpadEnter as end key**  
+
+The number pad `enter` key can be used as the `=` end key by settings `numpadEnter_endKey` to `yes`. This will also allow you to the trigger the calculator with this key or if no trigger key is set then it will just function as the default number pad enter.
+
+
 **Calculator timeout**  
 
 The default time the calculator will stay on after typing an equation is 60 seconds. This is so the calculator doesn't stay on when you use one of the trigger keys but don't intend to use the calculator. Change `timeout` to `T120` for 120 seconds, `T30` for 30 seconds or leave it blank to disable the timeout altogether.
