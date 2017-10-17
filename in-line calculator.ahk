@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.4.2
+version     = 2.4.4
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -12,13 +12,14 @@ source      = https://github.com/davebrny/in-line-calculator
 sendMode input
 
     ;# ini settings
-iniRead, enable_hotstrings,  % a_scriptDir "\settings.ini", settings, enable_hotstrings
-iniRead, enable_number_row,  % a_scriptDir "\settings.ini", settings, enable_number_row
-iniRead, enable_number_pad,  % a_scriptDir "\settings.ini", settings, enable_number_pad
-iniRead, numpadEnter_endKey, % a_scriptDir "\settings.ini", settings, numpadEnter_endKey
-iniRead, enable_hotkeys,     % a_scriptDir "\settings.ini", settings, enable_hotkeys
-iniRead, timeout,            % a_scriptDir "\settings.ini", settings, timeout
-iniRead, trigger_key,        % a_scriptDir "\settings.ini", settings, trigger_key
+iniRead, section, % a_scriptDir "\settings.ini", settings
+loop, parse, % section, `n, `r
+    {
+    stringGetPos, pos, a_loopField, =, L1
+    stringMid, ini_key, a_loopField, pos, , L
+    stringMid, ini_value, a_loopField, pos + 2
+    %ini_key% := ini_value
+    }
 
     ;# tray menu stuff
 if (a_isCompiled = 1)
@@ -64,8 +65,8 @@ if (enable_hotstrings = "yes")
     }
 if (enable_hotkeys = "yes")
     {
-    hotkey, !=, inline_hotkey, on
-    hotkey, !#, inline_hotkey, on
+    hotkey, % result_hotkey,   inline_hotkey, on
+    hotkey, % equation_hotkey, inline_hotkey, on
     }
 hotkey, ifWinNotActive
 
@@ -118,9 +119,9 @@ if (calculator_state = "off")
         else break ; if any other end key
         }
     if (this_endkey = "numpadEnter") and (numpadEnter_endKey = "yes")
-        this_endkey := "="
+        this_endkey := result_endkey
 
-    if (this_endkey != "=") and (this_endkey != "#")
+    if (this_endkey != result_endkey) and (this_endkey != equation_endkey)
         goTo, turn_calculator_off
     if (winExist("a") != active_window)
         goTo, turn_calculator_off
@@ -166,17 +167,17 @@ if (result != "")
     if inStr(result, ".")
         result := rTrim( rTrim(result, "0"), ".")       ; trim trailing .000
 
-    if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
+    if (a_thisHotkey = result_hotkey) or (a_thisHotkey = equation_hotkey)
          send % "{backspace}"                                  ; delete selected text
     else send % "{backspace " strLen(equation) + delete_n "}"  ; delete hotstring input
 
     clipboard("save")
-    if (this_endkey = "=") or (a_thisHotkey = "!=")
+    if (this_endkey = result_endkey) or (a_thisHotkey = result_hotkey)
          clipboard := result
     else clipboard := equation " = " result
     clipboard("paste")
 
-    if (a_thisHotkey = "!=") or (a_thisHotkey = "!#")
+    if (a_thisHotkey = result_hotkey) or (a_thisHotkey = equation_hotkey)
         {
         clipboard("get")
         if (clipboard = selected)    ; if clipboard wasnt pasted

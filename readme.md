@@ -7,7 +7,7 @@
 
 - [What's this?](#whats-this)  
 - [Installation](#installation)  
-- [Usage](#how-do-you-use-it)  
+- [Usage](#usage)  
 - [Options](#options)  
 - [Credits](#credits)  
 &nbsp;
@@ -15,7 +15,7 @@
 
 
 
-### What's this?  
+## What's this?  
 
 An interface-less calculator for Windows that lets you do basic math without having to leave the line you're typing on.  
 
@@ -27,7 +27,7 @@ Almost anywhere in windows where you can enter text. Any text editor, search box
 
 
 
-### Installation  
+## Installation  
 
 Download and extract the [latest release](https://github.com/davebrny/in-line-calculator/releases) .zip file. If you already have [AutoHotkey](https://www.autohotkey.com) installed then run `in-line calculator.ahk`, otherwise run the `.exe` version which lets you use the script without having AutoHotkey installed. The script doesn't install anything and it's also portable so it can be run from any location.  
 &nbsp;
@@ -35,7 +35,7 @@ Download and extract the [latest release](https://github.com/davebrny/in-line-ca
 
 
 
-### Usage
+## Usage
 
 Press the equals key to activate the calculator, type out an equation, then use one of the two end keys to calculate it
 
@@ -110,7 +110,7 @@ For example, typing `=5pw5=` won't calculate anything since the `w` key would ha
 ---
 
 
-### Other features
+## Other features
 
 **Select an equation**  
 
@@ -144,12 +144,13 @@ The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>
 *(Any time you make any changes to the `settings.ini` file you will need to select "Reload This Script" from the tray icon to update the script with the new settings)*   
 
 
-**Custom trigger key**  
+**Custom keys**  
 
-The key that triggers the calculator can be changed to something else beside the equals key.  
-To have any of the number keys be the trigger that starts the calculator, leave `trigger_key` empty.
+The key that triggers the calculator can be changed to something else beside the equals key by changing the value in `trigger_key`. To have any of the number keys be the trigger that starts the calculator, leave this value empty.  
 
 > Triggering with the number keys can sometimes calculate things that aren't equations. This can happen in situations where you're typing a date like "31-12-2017" and then happen to use one of the end keys right after.  One way of avoiding this is by remembering to press the `escape` key to turn off the calculator before pressing an end key. If you forget to do that then `ctrl + z` can always be used to undo the calculation.
+
+Hotkeys and Hotstring endkeys can be changed to something other than the defaults by changing the values in `result_hotkey`, `equation_hotkey`, `result_endkey` and `equation_endkey`  
 
 
 **Enable/Disable**  
