@@ -3,22 +3,39 @@
 <a href="url"><img src="http://i.imgur.com/xlONmxY.gif"></a><br></br>
 
 
+### Table of Contents
 
-#### What's this?
-
-An interface-less calculator for Windows that lets you do basic math without having to leave the line you're typing on.  
+- [What's this?](#whats-this)  
+- [Installation](#installation)  
+- [Usage](#how-do-you-use-it)  
+- [Options](#options)  
+- [Credits](#credits)  
 &nbsp;
 
 
 
-#### Where can it be used?
+
+### What's this?  
+
+An interface-less calculator for Windows that lets you do basic math without having to leave the line you're typing on.  
+
+**Where can it be used?**  
 
 Almost anywhere in windows where you can enter text. Any text editor, search box or command line... even the text edit box that you use to rename files.  
 &nbsp;  
 
 
 
-#### How do you use it?
+
+### Installation  
+
+Download and extract the [latest release](https://github.com/davebrny/in-line-calculator/releases) .zip file. If you already have [AutoHotkey](https://www.autohotkey.com) installed then run `in-line calculator.ahk`, otherwise run the `.exe` version which lets you use the script without having AutoHotkey installed. The script doesn't install anything and it's also portable so it can be run from any location.  
+&nbsp;
+
+
+
+
+### Usage
 
 Press the equals key to activate the calculator, type out an equation, then use one of the two end keys to calculate it
 
@@ -35,8 +52,7 @@ The &nbsp; <kbd>**#**</kbd> &nbsp; key keeps the equation and pastes the answer 
 
 ```
 5+5 = 10
-```
-
+```  
 &nbsp;
 
 
@@ -64,10 +80,8 @@ Some examples:
 ```
 (27 d 4) x 12 = 81
 (27 / 4) * 12
-```
-
+```  
 &nbsp;
-
 
 
 
@@ -86,9 +100,9 @@ If a key is pressed that isn't in the above list then the calculator will turn o
 For example, typing `=5pw5=` won't calculate anything since the `w` key would have turned the calculator off.
 
 
-> *The tray icon can be used to check what state the calculator is in. If the calculator is on the icon will be a "plus" symbol, if it's off then it will be showing the default "equal" symbol.  
-You can use the escape key at any time to reset or turn off the calculator*
+> *The tray icon can be used to check what state the calculator is in. If the calculator is on the icon will be a "plus" symbol, if it's off then it will be showing the default "equal" symbol.*  
 
+> *You can use the escape key at any time to reset or turn off the calculator*  
 &nbsp;
 &nbsp;
 
@@ -96,9 +110,7 @@ You can use the escape key at any time to reset or turn off the calculator*
 ---
 
 
-## Other features
-
-
+### Other features
 
 **Select an equation**  
 
@@ -108,26 +120,23 @@ Select an equation and use one of the following hotkeys:
 <kbd>alt</kbd> + <kbd>#</kbd> &nbsp; Equation & result  
 
 *This feature uses the clipboard to get the equation text and paste it back again so if it's used on static text (like on this page) where the result can't be pasted, then it will be shown in a tooltip message instead.*  
-
 &nbsp;
-
 
 
 **Add numbers quickly**  
 
 When selecting an equation, if there are no math symbols in the selected text, then every space between the numbers will be replaced with pluses.  
-`100 200 300` will become `100+200+300`
-
+`100 200 300` will become `100+200+300`  
 &nbsp;
-
 
 
 **Windows calculator**  
 
 The keys &nbsp; <kbd>a</kbd> <kbd>b</kbd> <kbd>d</kbd> <kbd>p</kbd> <kbd>m</kbd> <kbd>s</kbd> <kbd>t</kbd> <kbd>x</kbd> &nbsp; are remapped to send the corresponding math symbols when Windows calculator is open.   
-The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>
-
+The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>  
 &nbsp;
+
+
 
 
 ## Options
@@ -161,9 +170,10 @@ The default time the calculator will stay on after typing an equation is 60 seco
 
 **Start with windows**  
 
-To have the script start when windows boots up, select "Start With Windows" from the tray icon.
-
+To have the script start when windows boots up, select "Start With Windows" from the tray icon.  
 &nbsp;
+
+
 
 
 ## Credits
