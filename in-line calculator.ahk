@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.5
+version     = 2.5.1
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -63,12 +63,12 @@ if (enable_hotstrings = "yes")
     if (numpadEnter_endKey = "yes")
         hotkey, ~numpadEnter, numpadEnter_endKey, on
     }
-if (enable_hotkeys = "yes")
-    {
-    hotkey, % result_hotkey,   inline_hotkey, on
+if (result_hotkey)
+    hotkey, % result_hotkey, inline_hotkey, on
+if (equation_hotkey)
     hotkey, % equation_hotkey, inline_hotkey, on
-    hotkey, % history_hotkey,  history_menu, on
-    }
+if (history_hotkey)
+    hotkey, % history_hotkey, history_menu, on
 hotkey, ifWinNotActive
 
     ;# keys that will end the calculator

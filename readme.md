@@ -161,8 +161,9 @@ Hotkeys and Hotstring endkeys can be changed to something other than the default
 
 **Enable/Disable**  
 
-To disable both the number row and number pad keys and use the "select equation" feature only, set `enable_hotstrings` to `no`.
-There are also options to disable either the number row or the number pad keys which is useful if you're using the number keys to trigger the calculator and want to have one set of keys that wont trigger anything.  
+To disable both the number row and number pad keys and use the "select equation" feature only, set `enable_hotstrings` to `no`.  
+There's also option to disable the number row or the number pad individually which is useful if you want to have one set of keys that wont trigger anything.  
+To disable a hotkey leave its value empty.  
 
 
 **NumpadEnter as end key**  
