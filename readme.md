@@ -130,6 +130,12 @@ When selecting an equation, if there are no math symbols in the selected text, t
 &nbsp;
 
 
+**History menu**  
+Use <kbd>ctrl</kbd> + <kbd>alt</kbd> + <kbd>=</kbd> to show a menu with the last 15 calculations.  
+Clicking an item in the menu will add it to the clipboard. If the <kbd>ctrl</kbd> is being held down then only the result is added to the clipboard.  
+&nbsp;
+
+
 **Windows calculator**  
 
 The keys &nbsp; <kbd>a</kbd> <kbd>b</kbd> <kbd>d</kbd> <kbd>p</kbd> <kbd>m</kbd> <kbd>s</kbd> <kbd>t</kbd> <kbd>x</kbd> &nbsp; are remapped to send the corresponding math symbols when Windows calculator is open.   

@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.4.4
+version     = 2.5
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -67,6 +67,7 @@ if (enable_hotkeys = "yes")
     {
     hotkey, % result_hotkey,   inline_hotkey, on
     hotkey, % equation_hotkey, inline_hotkey, on
+    hotkey, % history_hotkey,  history_menu, on
     }
 hotkey, ifWinNotActive
 
@@ -84,6 +85,7 @@ end_keys =
 {F12}{F13}{F14}{F15}{F16}{F17}{F18}{F19}{F20}{F21}{F22}{F23}{F24}
 )
 
+history := []
 calculator_state := "off"
 
 return  ; end of auto-execute ---------------------------------------------------
@@ -187,6 +189,10 @@ if (result != "")
             }
         }
     clipboard("restore")
+
+    history.insertAt(1, equation "    =    " result)
+    if (history.maxIndex() > 15)
+        history.pop()
     }
 return
 
@@ -259,15 +265,46 @@ d::send, {/}    ; divide
 
 
 
-msg_timer() {
-    tool_id := winExist("ahk_class tooltips_class32")
-    mouseGetPos, , , id_under   ; id under cursor
-    if (id_under != tool_id)
-        {
-        setTimer, msg_timer, off
-        toolTip,
-        }
+history_menu:
+menu, history_menu, add,     in-line calculator history:, history_select
+menu, history_menu, disable, in-line calculator history:
+menu, history_menu, add
+loop, % history.maxIndex()
+    menu, history_menu, add, % history[a_index], history_select
+if history.maxIndex()
+    menu, history_menu, add
+menu, history_menu, add, clear history, clear_history
+menu, history_menu, show
+menu, history_menu, deleteAll
+return
+
+history_select:
+this_menu := a_thisMenuItem
+if getKeyState("ctrl", "p")
+    {
+    stringSplit, split_, this_menu, =, % a_space
+    this_menu := split_2    ; result only
+    }
+stringReplace, this_menu, this_menu, % "    =    ", % " = "
+clipboard := this_menu
+msg(this_menu "  added to the clipboard")
+return
+
+clear_history:
+history := []
+msg("history cleared")
+return
+
+
+
+msg(string) {
+    toolTip, % string
+    setTimer, msg_timer, 2500
 }
+msg_timer:
+setTimer, msg_timer, off
+toolTip,
+return
 
 
 
