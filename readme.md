@@ -119,7 +119,7 @@ Select an equation and use one of the following hotkeys:
 <kbd>alt</kbd> + <kbd>=</kbd> &nbsp; Result only  
 <kbd>alt</kbd> + <kbd>#</kbd> &nbsp; Equation & result  
 
-*This feature uses the clipboard to get the equation text and paste it back again so if it's used on static text (like on this page) where the result can't be pasted, then it will be shown in a tooltip message instead.*  
+*This feature uses the clipboard to get the equation text and paste it back again so if it's used on static text (like on this webpage) then it wont work since there is nowhere for the result to be pasted.*  
 &nbsp;
 
 

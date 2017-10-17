@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.5.1
+version     = 2.5.2
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -141,8 +141,7 @@ return
 inline_hotkey:
 clipboard("save")
 clipboard("get")
-selected := clipboard
-equation := convert_letters(trim(selected))
+equation := convert_letters(trim(clipboard))
 clipboard("restore")
 
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(),. \E]")
@@ -178,16 +177,6 @@ if (result != "")
          clipboard := result
     else clipboard := equation " = " result
     clipboard("paste")
-
-    if (a_thisHotkey = result_hotkey) or (a_thisHotkey = equation_hotkey)
-        {
-        clipboard("get")
-        if (clipboard = selected)    ; if clipboard wasnt pasted
-            {
-            toolTip, % result
-            setTimer, msg_timer, 2500
-            }
-        }
     clipboard("restore")
 
     history.insertAt(1, equation "    =    " result)
@@ -243,7 +232,6 @@ this_endkey := ""
 this_input  := ""
 new_input   := ""
 equation    := ""
-selected    := ""
 return
 
 
