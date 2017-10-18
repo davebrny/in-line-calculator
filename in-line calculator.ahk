@@ -26,6 +26,7 @@ if (a_isCompiled = 1)
     menu, tray, add, Reload This Script, reload
 menu, tray, icon, % a_scriptDir "\in-line calculator.ico"
 start_with_windows(1)    ; add the option to start the script when windows boots
+menu, tray, add, Github readme, open_github
 
     ;# group calculator apps
 groupAdd, calculators, Calculator ahk_exe ApplicationFrameHost.exe  ; windows 10
@@ -301,4 +302,10 @@ reload
 sleep 1000
 msgBox, 4, , The script could not be reloaded and will need to be manually restarted. Would you like Exit?
 ifMsgBox, yes, exitApp
+return
+
+
+
+open_github:
+run, https://github.com/davebrny/in-line-calculator#usage
 return
