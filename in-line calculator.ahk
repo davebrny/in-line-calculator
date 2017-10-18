@@ -1,6 +1,6 @@
 /*
 [script info]
-version     = 2.5.2
+version     = 2.5.3
 description = an interface-less calculator for basic math
 author      = davebrny
 source      = https://github.com/davebrny/in-line-calculator
@@ -144,6 +144,12 @@ clipboard("save")
 clipboard("get")
 equation := convert_letters(trim(clipboard))
 clipboard("restore")
+
+stringReplace, equation, equation, `r`n, % " ", all  ; replace lines with spaces
+stringReplace, equation, equation, `n,   % " ", all
+loop,    ; remove double spaces
+    stringReplace, equation, equation, % a_space . a_space, % a_space, useErrorLevel
+until (errorLevel = 0)
 
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(),. \E]")
     return    ; only continue if numbers, +/-*,.() or spaces
