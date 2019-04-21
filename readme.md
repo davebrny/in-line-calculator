@@ -70,6 +70,7 @@ As well as the regular math symbols (**+ - * /**), letters can be used which mak
 | <kbd>/</kbd> | <kbd>d</kbd> &nbsp; `(divide)`    
 
 
+
 Some examples:
 
 ```
@@ -149,7 +150,9 @@ The keys &nbsp; <kbd>a</kbd> <kbd>b</kbd> <kbd>d</kbd> <kbd>p</kbd> <kbd>m</kbd>
 The &nbsp; <kbd>=</kbd> &nbsp; key is remapped to send &nbsp; <kbd>enter</kbd>  
 &nbsp;
 
+**Tax calculator** 
 
+The key  <kbd>e</kbd> is remapped to 1.14975. This way you can type `100+e=` and the tax will be calculated automatically.
 
 
 ## Options
