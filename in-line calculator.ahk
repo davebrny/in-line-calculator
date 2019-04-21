@@ -167,6 +167,10 @@ calculate_equation:
 result := eval( strReplace(equation, ",", "") )    ; convert string to expression
 if (result != "")
     {
+	if (nb_decimals != "no")
+	{
+		result := Round(result , nb_decimals)
+	}
     if inStr(equation, ",")    ; add comma back in to numbers over 1,000
         {
         stringSplit, split, result, .
