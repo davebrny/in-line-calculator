@@ -75,7 +75,7 @@ hotkey, ifWinNotActive
     ;# keys that will end the calculator
 end_keys =
 (join
-{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{[}{]}{;}{'}{``}{#}{=}{!}{"}
+{c}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{[}{]}{;}{'}{``}{#}{=}{!}{"}
 {$}{`%}{^}{&}{_}{{}{}}{:}{@}{~}{<}{>}{?}{\}{|}{up}{down}{left}{right}{esc}{enter}
 {delete}{backspace}{tab}{LWin}{rWin}{LControl}{rControl}{LAlt}{rAlt}{printScreen}
 {home}{end}{insert}{pgUp}{pgDn}{numlock}{scrollLock}{help}{appsKey}{pause}{sleep}
@@ -128,7 +128,7 @@ if (calculator_state = "off")
         goTo, turn_calculator_off
     if (winExist("a") != active_window)
         goTo, turn_calculator_off
-
+	original_equation := this_input
     equation := convert_letters(this_input)    ; convert letters to math symbols
     if equation contains +,-,*,/
         goSub, calculate_equation
@@ -152,7 +152,7 @@ loop,    ; remove double spaces
 until (errorLevel = 0)
 
 if (equation = "") or if regExMatch(equation, "[^0-9\Q+*-/(),. \E]")
-    return    ; only continue if numbers, +/-*,.() or spaces
+	return    ; only continue if numbers, +/-*,.() or spaces
 
 if equation not contains +,-,*,/    ; convert spaces to pluses
     stringReplace, equation, equation, % a_space, +, all
@@ -181,7 +181,7 @@ if (result != "")
 
     if (a_thisHotkey = result_hotkey) or (a_thisHotkey = equation_hotkey)
          send % "{backspace}"                                  ; delete selected text
-    else send % "{backspace " strLen(equation) + delete_n "}"  ; delete hotstring input
+    else send % "{backspace " strLen(original_equation) + delete_n "}"  ; delete hotstring input
 
     clipboard("save")
     if (this_endkey = result_endkey) or (a_thisHotkey = result_hotkey)
@@ -220,6 +220,9 @@ return
 
 
 convert_letters(string) {
+	; I tried to add the tax number as a variable but it's always empty. Nore sure why so I'll leave it like that.
+	string := StrReplace(string, "e", 1.14975) ; convert e to tax % value
+
     for letters, symbols in {"p":"+", "a":"+", "m":"-", "s":"-"
                            , "x":"*", "t":"*", "b":"*", "d":"/"}
         stringReplace, string, string, % letters, % symbols, all
