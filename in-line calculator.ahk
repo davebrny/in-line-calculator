@@ -75,8 +75,8 @@ hotkey, ifWinNotActive
     ;# keys that will end the calculator
 end_keys =
 (join
-{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{[}{]}{;}{'}{``}{#}{=}{!}{"}
-{$}{`%}{^}{&}{_}{{}{}}{:}{@}{~}{<}{>}{?}{\}{|}{up}{down}{left}{right}{esc}{enter}
+{c}{e}{f}{g}{h}{i}{j}{k}{l}{n}{o}{q}{r}{u}{v}{w}{y}{z}{;}{'}{``}{#}{=}{!}{"}
+{`%}{^}{&}{_}{:}{~}{<}{>}{?}{|}{up}{down}{left}{right}{esc}{enter}
 {delete}{backspace}{tab}{LWin}{rWin}{LControl}{rControl}{LAlt}{rAlt}{printScreen}
 {home}{end}{insert}{pgUp}{pgDn}{numlock}{scrollLock}{help}{appsKey}{pause}{sleep}
 {ctrlBreak}{capsLock}{numpadEnter}{numpadUp}{numpadDown}{numpadLeft}{numpadRight}
@@ -116,6 +116,7 @@ if (calculator_state = "off")
         {
         input, new_input, V %timeout%, %end_keys%
         this_input .= new_input    ; append
+
         this_endkey := strReplace(errorLevel, "EndKey:", "")
         if (this_endkey = "backspace")    ; trim and continue with loop/input
             stringTrimRight, this_input, this_input, 1
@@ -164,16 +165,22 @@ return
 
 
 calculate_equation:
+if (use_comma_decimal_point = "yes")
+    equation := strReplace(equation, ",", ".")     ; set decimal point to '.'
 result := eval( strReplace(equation, ",", "") )    ; convert string to expression
 if (result != "")
     {
-    if inStr(equation, ",")    ; add comma back in to numbers over 1,000
-        {
-        stringSplit, split, result, .
-        result := regExReplace(split1, "(\d)(?=(?:\d{3})+(?:\.|$))", "$1,") "." split2
-        }
     if inStr(result, ".")
         result := rTrim( rTrim(result, "0"), ".")       ; trim trailing .000
+
+    if (use_comma_decimal_point = "yes")
+        result := eval( strReplace(result, ".", ",") )    ; restore ',' decimal point
+    else
+        if inStr(equation, ",")    ; add comma back in to numbers over 1,000
+            {
+            stringSplit, split, result, .
+            result := regExReplace(split1, "(\d)(?=(?:\d{3})+(?:\.|$))", "$1,") "." split2
+            }
 
     if (a_thisHotkey = result_hotkey) or (a_thisHotkey = equation_hotkey)
          send % "{backspace}"                                  ; delete selected text
